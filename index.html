@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浏览器端 SQL 查询引擎</title>
+  <link rel="stylesheet" href="/src/ui/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🗄️ 浏览器端 SQL 引擎</h1>
+    <div class="top-actions">
+      <label class="backend">
+        存储：
+        <select id="backend-select">
+          <option value="idb">IndexedDB（持久化）</option>
+          <option value="memory">内存（刷新即失）</option>
+        </select>
+      </label>
+      <button id="btn-sample" type="button">载入示例数据</button>
+      <div class="io-group">
+        <details class="menu">
+          <summary>导入</summary>
+          <div class="menu-body">
+            <button data-import="json" type="button">JSON…</button>
+            <button data-import="sql" type="button">SQL 脚本…</button>
+            <button data-import="csv-new" type="button">CSV 为新表…</button>
+            <button data-import="csv-table" type="button">CSV 入已有表…</button>
+          </div>
+        </details>
+        <details class="menu">
+          <summary>导出</summary>
+          <div class="menu-body">
+            <button data-export="json" type="button">全部 JSON</button>
+            <button data-export="sql" type="button">SQL 脚本</button>
+            <button data-export="csv" type="button">当前表 CSV</button>
+          </div>
+        </details>
+      </div>
+      <input type="file" id="file-input" accept=".json,.sql,.csv,text/plain,application/json" hidden />
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <span>表结构</span>
+        <button id="btn-refresh" type="button" title="刷新">⟳</button>
+      </div>
+      <ul id="table-list" class="table-list"></ul>
+    </aside>
+
+    <section class="main-pane">
+      <div class="editor-bar">
+        <button id="btn-run" class="primary" type="button">▶ 执行 (Ctrl+Enter)</button>
+        <button id="btn-explain" type="button">执行计划</button>
+        <span class="hint">支持多语句（; 分隔）</span>
+      </div>
+      <textarea id="sql-editor" spellcheck="false" placeholder="-- 在这里写 SQL，例如：
+CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER);
+INSERT INTO users (name, age) VALUES ('Alice', 30);
+SELECT * FROM users;"></textarea>
+
+      <div id="messages" class="messages"></div>
+
+      <div class="result-area">
+        <div class="tabs">
+          <button class="tab active" data-tab="result" type="button">结果</button>
+          <button class="tab" data-tab="plan" type="button">执行计划</button>
+        </div>
+        <div id="tab-result" class="tab-panel active">
+          <div id="result-meta" class="result-meta"></div>
+          <div class="table-wrap">
+            <table id="result-table"></table>
+          </div>
+        </div>
+        <div id="tab-plan" class="tab-panel">
+          <pre id="plan-view" class="plan-view">执行 SELECT 后此处显示计划树（EXPLAIN 不实际执行）。</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/src/ui/main.ts"></script>
+</body>
+</html>

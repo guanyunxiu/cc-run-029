@@ -1,0 +1,20 @@
+{
+  "name": "browser-sql-engine",
+  "version": "1.0.0",
+  "description": "浏览器端 SQL 查询引擎：IndexedDB 存储 + Web Worker 执行 + 自研 SQL 解析器",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "^5.0.2",
+    "jsdom": "^24.0.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0",
+    "vitest": "^1.6.0"
+  }
+}
