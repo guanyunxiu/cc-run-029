@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini SQL — 浏览器端 SQL 查询引擎</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20viewBox=%270%200%2016%2016%27%3E%3Crect%20width=%2716%27%20height=%2716%27%20rx=%273%27%20fill=%27%232d7fd6%27/%3E%3Cpath%20d=%27M4%205h8M4%208h8M4%2011h5%27%20stroke=%27white%27%20stroke-width=%271.6%27%20stroke-linecap=%27round%27/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/src/ui/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">▰</span>
+      <h1>Mini&nbsp;SQL</h1>
+      <span class="subtitle">浏览器端 SQL 引擎 · IndexedDB · Web Worker</span>
+    </div>
+    <div class="actions">
+      <button id="btn-run" class="primary" title="执行 (Ctrl/Cmd+Enter)">▶ 运行</button>
+      <button id="btn-explain" title="只看执行计划">计划</button>
+      <button id="btn-format">格式化</button>
+      <span class="divider"></span>
+      <button id="btn-export-json">导出 JSON</button>
+      <button id="btn-export-csv">导出 CSV</button>
+      <button id="btn-import-json">导入 JSON</button>
+      <button id="btn-import-csv">导入 CSV</button>
+      <button id="btn-reset" class="danger">清空库</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左侧：数据库结构 -->
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <h2>表结构</h2>
+        <button id="btn-refresh" title="刷新">⟳</button>
+      </div>
+      <div id="schema-tree" class="schema-tree">
+        <div class="hint">尚无表，先执行 CREATE TABLE。</div>
+      </div>
+      <div class="sidebar-foot">
+        <details>
+          <summary>快速示例</summary>
+          <div id="examples" class="examples"></div>
+        </details>
+      </div>
+    </aside>
+
+    <!-- 中间：编辑器 + 消息 -->
+    <section class="center">
+      <div class="editor-wrap">
+        <textarea id="editor" spellcheck="false"
+          placeholder="-- 在此输入 SQL，Ctrl/Cmd+Enter 执行&#10;CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER);"></textarea>
+        <div id="txn-badge" class="txn-badge hidden">事务中…</div>
+      </div>
+
+      <div class="messages-wrap">
+        <div class="panel-head">
+          <h2>消息</h2>
+          <div id="msg-summary"></div>
+        </div>
+        <div id="messages" class="messages"></div>
+      </div>
+    </section>
+
+    <!-- 右侧：结果 + 执行计划 -->
+    <section class="right">
+      <div class="tabs">
+        <button class="tab active" data-tab="results">结果</button>
+        <button class="tab" data-tab="plan">执行计划</button>
+      </div>
+      <div class="tab-body">
+        <div id="pane-results" class="pane active">
+          <div id="result-meta" class="result-meta"></div>
+          <div id="result-table-wrap" class="result-table-wrap">
+            <div class="hint">执行查询后在此显示结果。</div>
+          </div>
+        </div>
+        <div id="pane-plan" class="pane">
+          <pre id="plan-view" class="plan-view">执行 EXPLAIN 或点击「计划」查看。</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <input type="file" id="file-input" accept=".json,.csv,application/json,text/csv" hidden />
+  <script type="module" src="/src/ui/main.ts"></script>
+</body>
+</html>
